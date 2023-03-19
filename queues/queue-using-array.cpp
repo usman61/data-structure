@@ -23,7 +23,7 @@ class Queue{
 		}
 		if (front == -1)
       		front = 0;
-      		
+			
 		arr[++rear] =val;
 		length++;
 	}
