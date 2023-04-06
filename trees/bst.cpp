@@ -186,6 +186,7 @@ Node* BST::insert(Node *r,int val){
         
         if(r->data== val){
             cout<<"Already Exist"<<endl;
+            return r;
         
         }
         else if(val<r->data)
