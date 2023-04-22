@@ -14,6 +14,63 @@ class Node{
     }
 };
 
+struct Trunk
+{
+    Trunk *prev;
+    string str;
+
+    Trunk(Trunk *prev, string str)
+    {
+        this->prev = prev;
+        this->str = str;
+    }
+};
+
+
+// Helper function to print branches of the binary tree
+void showTrunks(Trunk *p)
+{
+    if (p == NULL)
+        return;
+
+    showTrunks(p->prev);
+
+    cout<< p->str;
+}
+
+void printTree(Node *&root, Trunk *prev, bool isRight)
+{
+    if (root == NULL)
+        return;
+    
+    string prev_str = "    ";
+    Trunk *trunk = new Trunk(prev, prev_str);
+
+    printTree(root->right, trunk, true);
+
+    if (!prev)
+        trunk->str = "---";
+    else if (isRight)
+    {
+        trunk->str = ".---";
+        prev_str = "   |";
+    }
+    else
+    {
+        trunk->str = "`---";
+        prev->str = prev_str;
+    }
+
+    showTrunks(trunk);
+    cout<<root->data << endl;
+
+    if(prev)
+        prev->str = prev_str;
+    trunk->str = "   |";
+
+    printTree(root->left, trunk, false);
+}
+
 class BST{
     public:
     Node *root;
@@ -29,7 +86,7 @@ class BST{
     int findHeight(Node *r);
     void merge( Node* r1, Node* r2);    
     void findFloorCeil(Node *r,int key,Node *&floor,Node *&ceil);
-     
+    Node* deleteNode(Node* root, int data); 
 
 };
 int main(int argc, char const *argv[])
@@ -39,38 +96,87 @@ int main(int argc, char const *argv[])
     Node obj;
   
 
-    t1.insert((t1.root),5);
+    t1.insert((t1.root),10);
     t1.insert((t1.root),9);
     t1.insert((t1.root),12);
 
-    t2.insert((t2.root),1);
-    t2.insert((t2.root),15);
-    t2.insert((t2.root),10);
+    t1.insert((t1.root),13);
+    t1.insert((t1.root),15);
+    t1.insert((t1.root),5);
+    t1.insert((t1.root),8);
  
-    cout<<"-----------------------"<<endl;
-    t1.inOrderTraversal(t1.root);
-    cout<<"-----------------------"<<endl;
+    // cout<<"-----------------------"<<endl;
+    // t1.inOrderTraversal(t1.root);
+    // cout<<"-----------------------"<<endl;
 
-    cout<<"-----------------------"<<endl;
-    t2.inOrderTraversal(t2.root);
-    cout<<"-----------------------"<<endl;
+    printTree(t1.root, NULL, false);
+    cout<<"--------------------------------"<<endl;
 
-    t1.merge(t1.root,t2.root);
 
-    cout<<"-----------------------"<<endl;
-    t2.inOrderTraversal(t2.root);
-    cout<<"-----------------------"<<endl;
+
+    // t1.deleteNode(t1.root,10);
+
+
+    printTree(t1.root, NULL, false);
+
+
+
+
+
+   // t1.merge(t1.root,t2.root);
 
 
     // cout<<t1.searchNode(t1.root,9)<<endl;
     // cout<<t1.countLeafNodes(t1.root)<<endl;
     // cout<<t1.findHeight(t1.root)<<endl;
-    Node *floor=NULL,*ceil=NULL;
-    int key=5;
-    t2.findFloorCeil(t2.root,key,ceil,floor);
-    cout<<"Ceil-------> "<<( ceil  ? ceil->data: -1)<<endl;
-    cout<<"Floor-------> "<<(floor ? floor->data: -1)<<endl;
+    // Node *floor=NULL,*ceil=NULL;
+    // int key=5;
+    // t2.findFloorCeil(t2.root,key,ceil,floor);
+    // cout<<"Ceil-------> "<<( ceil  ? ceil->data: -1)<<endl;
+    // cout<<"Floor-------> "<<(floor ? floor->data: -1)<<endl;
     return 0;
+}
+
+Node* BST::deleteNode(Node* root, int data)
+{
+if (root == NULL)
+return root;
+else if (data < root->data)
+root->left = deleteNode(root->left, data);
+else if (data > root->data)
+root->right = deleteNode(root->right, data);
+else
+{
+//No child
+if (root->right == NULL && root->left == NULL)
+{
+delete root;
+root = NULL;
+return root;
+}
+//One child on left
+else if (root->right == NULL)
+{
+Node* temp = root;
+root = root->left;
+delete temp;
+}
+//One child on right
+else if (root->left == NULL)
+{
+Node* temp = root;
+root = root->right;
+delete temp;
+}
+//two child
+else
+{
+Node* temp = findMax(root->left);
+root->data = temp->data;
+root->left = deleteNode(root->left, temp->data);
+}
+}
+return root;
 }
 
 void BST::findFloorCeil(Node *r,int key,Node *&ceil,Node *&floor){
