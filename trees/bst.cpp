@@ -86,7 +86,8 @@ class BST{
     int findHeight(Node *r);
     void merge( Node* r1, Node* r2);    
     void findFloorCeil(Node *r,int key,Node *&floor,Node *&ceil);
-    Node* deleteNode(Node* root, int data); 
+    Node* deleteNode(Node* root, int data);
+    Node* kthSmallestNode(Node *r,int k); 
 
 };
 int main(int argc, char const *argv[])
@@ -100,10 +101,10 @@ int main(int argc, char const *argv[])
     t1.insert((t1.root),9);
     t1.insert((t1.root),12);
 
-    t1.insert((t1.root),13);
-    t1.insert((t1.root),15);
-    t1.insert((t1.root),5);
-    t1.insert((t1.root),8);
+    // t1.insert((t1.root),13);
+    // t1.insert((t1.root),15);
+    // t1.insert((t1.root),5);
+    // t1.insert((t1.root),8);
  
     // cout<<"-----------------------"<<endl;
     // t1.inOrderTraversal(t1.root);
@@ -111,22 +112,13 @@ int main(int argc, char const *argv[])
 
     printTree(t1.root, NULL, false);
     cout<<"--------------------------------"<<endl;
-
-
+   
 
     // t1.deleteNode(t1.root,10);
-
-
-    printTree(t1.root, NULL, false);
-
-
-
-
-
+    // printTree(t1.root, NULL, false);
    // t1.merge(t1.root,t2.root);
 
-
-    // cout<<t1.searchNode(t1.root,9)<<endl;
+   // cout<<t1.searchNode(t1.root,9)<<endl;
     // cout<<t1.countLeafNodes(t1.root)<<endl;
     // cout<<t1.findHeight(t1.root)<<endl;
     // Node *floor=NULL,*ceil=NULL;
@@ -134,9 +126,44 @@ int main(int argc, char const *argv[])
     // t2.findFloorCeil(t2.root,key,ceil,floor);
     // cout<<"Ceil-------> "<<( ceil  ? ceil->data: -1)<<endl;
     // cout<<"Floor-------> "<<(floor ? floor->data: -1)<<endl;
+    
+    int k=1;
+    Node *resp = t1.kthSmallestNode(t1.root,k); 
+    cout<< (resp ? resp->data: -1)<<endl;
+
+   
     return 0;
 }
 
+Node* BST::kthSmallestNode(Node *r,int k){
+
+    static int cnt =0;
+
+   
+    if(r==NULL)
+    return NULL;
+
+
+    Node *left = kthSmallestNode(r->left,k);
+    if(left!=NULL)
+    return left;
+
+    if (cnt+1==k){
+        return r;
+    }
+
+    // cout<<cnt<<endl;
+    cnt++;
+   
+    // cout<<"In righ"<<endl;
+     Node *right = kthSmallestNode(r->right,k);
+    //if (right!=NULL)
+     return right;
+    // if(resp!=NULL)
+    // return resp; 
+ 
+
+}
 Node* BST::deleteNode(Node* root, int data)
 {
 if (root == NULL)
