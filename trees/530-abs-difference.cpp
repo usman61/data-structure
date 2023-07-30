@@ -4,7 +4,7 @@
 Given the root of a Binary Search Tree (BST), return the minimum absolute 
 difference between the values of any two different nodes in the tree.
 
-Note: This question is the same as 783: 
+Note: same logic works for 783 as well: 
 https://leetcode.com/problems/minimum-distance-between-bst-nodes/
 
 */
@@ -37,11 +37,16 @@ int main(int argc, char const *argv[])
     BST t1;
     int diff  = 0;
 
-    t1.insert((t1.root),1);
-    t1.insert((t1.root),0);
-    t1.insert((t1.root),48);
-    t1.insert((t1.root),12);
-    t1.insert((t1.root),49);
+    // t1.insert((t1.root),1);
+    // t1.insert((t1.root),0);
+    // t1.insert((t1.root),48);
+    // t1.insert((t1.root),12);
+    // t1.insert((t1.root),49);
+
+    t1.insert((t1.root),5);
+    t1.insert((t1.root),3);
+    t1.insert((t1.root),8);
+    // t1.insert((t1.root),9);
    
     t1.traverseNodes(t1.root,t1.root,diff);
     cout<<diff<<endl;
@@ -52,7 +57,7 @@ this would traverse the whole tree for each node.
 */
 void BST::traverseNodes(Node * curr,Node *r,int &diff){
 
-    if(root==NULL)
+    if(root==NULL || curr==NULL)
     return;
 
     getDifference(curr,r,diff);
@@ -69,7 +74,7 @@ this would calculate the difference between nodes
 void BST::getDifference(Node *curr,Node *r,int &diff){
 
   
-    if(r==NULL){
+    if(r==NULL || curr==NULL){
       return;
     } 
     
